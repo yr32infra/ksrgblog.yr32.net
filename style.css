@@ -1,0 +1,217 @@
+html, body {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+
+a {
+	text-decoration: inherit;
+	color: inherit;
+}
+
+p, h1, h2, h3 {
+	margin: 0;
+}
+
+body {
+	font-family: "ＭＳ ゴシック";
+	font-size: 125%;
+	font-smooth: never;
+	word-break: break-all;
+	overflow-wrap: break-word;
+	background-color: black;
+	color: white;
+}
+
+header {
+	text-align: center;
+}
+
+main {
+	position: relative;
+	height: calc(100vh - 12em);
+	overflow-y: scroll;
+}
+
+footer {
+	text-align: center;
+}
+
+body.loading, body.loading * {
+	cursor: progress !important;
+}
+
+body.loading .image-like {
+	opacity: 0;
+}
+
+.link-like {
+	cursor: pointer;
+	color: #fff;
+	text-decoration: underline;
+}
+
+*.do-not-markup .link-like {
+	cursor: inherit;
+	color: inherit;
+	text-decoration: inherit;
+}
+
+.link-like.not-allowed {
+	cursor: not-allowed;
+	color: #888;
+}
+
+.image-like {
+	cursor: default;
+	display: inline-block;
+	user-select: none;
+}
+
+@keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@keyframes softblink {
+	0% { opacity: 0; }
+	50% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+.big {
+	font-size: 125%;
+}
+
+body:not(.loading) .softblink {
+	color: white;
+	animation: softblink 4s steps(5, end) infinite;
+	text-shadow: 0 0 1em white, 0 0 0.3em gray;
+}
+
+body:not(.loading) .blink {
+	color: white;
+	animation: blink 0.5s steps(1, end) infinite;
+	text-shadow: 0 0 1em white, 0 0 0.3em gray;
+}
+
+.blink.fast {
+	animation-duration: 0.1s;
+}
+
+@keyframes colorful-rotate {
+	0% { filter: hue-rotate(0deg); transform: rotate3d(0, 1, 0, 0deg); }
+	100% { filter: hue-rotate(360deg); transform: rotate3d(0, 1, 0, 360deg); }
+}
+
+.colorful-rotate {
+	color: red;
+	text-shadow: 0 0 1em red, 0 0 0.3em darkred;
+	font-size: 150%;
+}
+
+body:not(.loading) .colorful-rotate {
+	animation: colorful-rotate 3s steps(24, end) infinite;
+}
+
+body:not(.loading) .colorful-rotate.fast {
+	animation-duration: 1s;
+	animation-timing-function: steps(10, end);
+}
+
+.colorful-rotate.green {
+	color: green;
+	text-shadow: 0 0 1em green, 0 0 0.3em darkgreen;
+}
+
+.colorful-rotate.blue {
+	color: blue;
+	text-shadow: 0 0 1em blue, 0 0 0.3em darkblue;
+}
+
+.container {
+	max-width: 640px;
+	margin: 0 auto;
+	padding: 0 1em;
+}
+
+#tips {
+	font-size: 95%;
+	width: 100%;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.japtext {
+	font-weight: bold;
+	font-style: italic;
+	color: red;
+}
+
+.many-br-like-spacing {
+	height: 3em;
+}
+
+.thin-br-like-spacing {
+	height: 1.5em;
+}
+
+.warning {
+	color: red;
+	font-weight: bold;
+}
+
+.black-out {
+	color: red;
+	text-shadow: 0 0 1em red, 0 0 0.3em darkred;
+}
+
+/* browser bug hack */
+@keyframes do-nothing {
+	0% {
+		color: inherit;
+		cursor: inherit;
+		display: inherit;
+		font-size: inherit;
+		opacity: inherit;
+		text-shadow: inherit;
+		user-select: inherit;
+	}
+}
+
+body:not(.loading) *.do-not-markup *,
+body:not(.get-css-strong-priority) *.do-not-markup * {
+	animation: do-nothing 0.5s infinite;
+	color: inherit;
+	cursor: inherit;
+	display: inherit;
+	font-size: inherit;
+	opacity: inherit;
+	text-shadow: inherit;
+	user-select: inherit;
+}
+
+#article-tree {
+	min-height: 300px;
+}
+
+#article-tree > div div {
+	padding-left: 40px;
+	display: none;
+}
+
+#article-tree input:checked ~ div {
+	display: block;
+}
+
+#article-tree input {
+	margin-right: 10px;
+}
+
+#article-tree ul {
+	margin: 0;
+	padding-left: 15px;
+}
