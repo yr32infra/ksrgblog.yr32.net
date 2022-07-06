@@ -188,17 +188,8 @@
 	});
 
 	const fetchArticles = new Promise(resolve => {
-		const articleName = 
-			location.search
-				.substring(1)
-				.split('&')
-				.map(s => {
-					const v = s.split('=');
-					return { key: v[0], value: decodeURI(v[1]) };
-				})
-				.find(v =>
-					v.key === 'article' && v.value !== ''
-				)?.value;
+		/** @type {string | null} */
+		const articleName = new URLSearchParams(location.search).get('article');
 
 		fetch('https://blog.ksrgte.ch/api/articles')
 			.then(response => response.json())
