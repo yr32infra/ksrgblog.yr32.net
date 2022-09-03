@@ -139,9 +139,8 @@
 
 		if (a.created_at && a.updated_at)
 			if (a.created_at.getTime() != a.updated_at.getTime()) {
-				document.getElementById('datetime').innerHTML += '<br>';
 				document.getElementById('datetime').textContent +=
-					`更新日時: ${dateTimeToString(a.updated_at)}`;
+					`\n更新日時: ${dateTimeToString(a.updated_at)}`;
 			}
 
 		document.getElementById('title').textContent = a.title;
