@@ -12,6 +12,25 @@
 		'ありえね～～～！！！',
 	];
 
+	const isNegativeLookBehindSupported = (() => {
+		try {
+			// A dirty test:
+			// - Safari (and legacy browser): deny the literal at parse phase
+			// - non-Safari modern browser: pass
+			//
+			// Please refer https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#browser_compatibility
+			// for more info.
+			Function("() => /(?<!)/");
+			return true;
+		} catch (e) {
+			if (e instanceof SyntaxError) {
+				return false;
+			} else {
+				throw e;
+			}
+		}
+	})();
+
 	const REPLACES = [
 		{
 			from: /^\-+$/gm,
@@ -29,87 +48,92 @@
 			from: /\n\n\n+/g,
 			to: '<div class=many-br-like-spacing></div>'
 		},
-		{
-			from: /(?<!\<[^>]+)\n\n+/g,
-			to: '<div class=thin-br-like-spacing></div>'
-		},
-		{
-			from: /(?<!\<[^>]+)(（.+?）|\(.+?\))/g,
-			to: '<span class="image-like softblink do-not-markup" title="$1.gif">$1</span>'
-		},
-		{
-			from: /(?<!\<[^>]+)\{\{Warning\|(.+)\}\}/gi,
-			to: '</p><div class=warning>$1</div><p>'
-		},
-		{
-			from: /(?<!\<[^>]+)\[\[twitter:(.+)\|(.+)\]\]/gi,
-			to: '<a href="https://twitter.com/$1" class="link-like do-not-markup" target=_blank>$2</a>'
-		},
-		{
-			from: /(?<!\<[^>]+)\[\[tweet:(.+)\|(.+)\]\]/gi,
-			to: '<a href="https://twitter.com/_/status/$1" class=link-like target=_blank>$2</a>'
-		},
-		{
-			from: /(?<!\<[^>]+)\{\{twitter hashtag\|(.+)\}\}/gi,
-			to: '<a href="https://twitter.com/hashtag/$1" class=link-like target=_blank>#$1</a>'
-		},
-		{
-			from: /(?<!\<[^>]+)(@)([0-9_a-z]+)/gi,
-			to: '<a href="https://twitter.com/$2" class="link-like do-not-markup" target=_blank>$1$2</a>'
-		},
-		{
-			from: /(?<!\<[^>]+)⬛/g,
-			to: '■',
-		},
-		{
-			from: /(?<!\<[^>]+)([!■✕□])/g,
-			to: '<span class="black-out image-like" title="$1.gif">$1</span>',
-		},
-		{
-			from: /(?<!\<[^>]+)♡/g,
-			to: "❤️",
-		},
-		{
-			from: /(?<!\<[^>]+)(?<paren>(”|"))(.+?)\k<paren>/g,
-			to: "<b>$1$3$1</b>",
-		},
-		{
-			from: /(?<!\<[^>]+)(?<paren>(\*))(.+?)\k<paren>/g,
-			to: "<b>$3</b>",
-		},
-		{
-			from: /(?<!\<[^>]+)(「.+?」|［.+?］|〔.+?〕)/g,
-			to: "<b>$1</b>",
-		},
-		{
-			from: /(?<!\<[^>]+)\[(.+):(.+)\]:?/g,
-			to: '</p><div class=warning><span class="blink image-like">$1</span>$2</div><p>'
-		},
-		{
-			from: /(?<!\<[^>]+)(VRChat|evil|break|learned|T1|Windows(\d+)?|i\d(\-\d+)?|Q\d+|[\?？!！]+?|Twitter2?|Discord|インターネット|SAN値?(ピンチ)?|女装)/gi,
-			to: '<span class="image-like colorful-rotate green fast do-not-markup" title="$1.gif">$1</span>'
-		},
-		{
-			from: /(?<!\<[^>]+)(?<=\d)(:)(?=\d)/g,
-			to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
-		},
-		{
-			from: /(?<!\<[^>]+)(?<=\d)(\-)(?=\d)/g,
-			to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
-		},
-		{
-			from: /(?<!\<[^>]+)(?<=\d)(\.)(?=\d)/g,
-			to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
-		},
-		{
-			from: /(?<!\<[^>]+)(?<=\d)(,)(?=\d)/g,
-			to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
-		},
-		{
-			from: /(?<!\<[^>]+)(\d)/g,
-			to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
-		},
 	];
+
+	if (isNegativeLookBehindSupported) {
+		REPLACES.push(
+			{
+				from: new RegExp("(?<!\\<[^>]+)\\n\\n+", 'g'),
+				to: '<div class=thin-br-like-spacing></div>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(（.+?）|\\(.+?\\))', 'g'),
+				to: '<span class="image-like softblink do-not-markup" title="$1.gif">$1</span>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)\\{\\{Warning\\|(.+)\\}\\}', 'gi'),
+				to: '</p><div class=warning>$1</div><p>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)\\[\\[twitter:(.+)\\|(.+)\\]\\]', 'gi'),
+				to: '<a href="https://twitter.com/$1" class="link-like do-not-markup" target=_blank>$2</a>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)\\[\\[tweet:(.+)\\|(.+)\\]\\]', 'gi'),
+				to: '<a href="https://twitter.com/_/status/$1" class=link-like target=_blank>$2</a>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)\\{\\{twitter hashtag\\|(.+)\\}\\}', 'gi'),
+				to: '<a href="https://twitter.com/hashtag/$1" class=link-like target=_blank>#$1</a>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(@)([0-9_a-z]+)', 'gi'),
+				to: '<a href="https://twitter.com/$2" class="link-like do-not-markup" target=_blank>$1$2</a>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)⬛', 'g'),
+				to: '■',
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)([!■✕□])', 'g'),
+				to: '<span class="black-out image-like" title="$1.gif">$1</span>',
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)♡', 'g'),
+				to: "❤️",
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(?<paren>(”|"))(.+?)\\k<paren>', 'g'),
+				to: "<b>$1$3$1</b>",
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(?<paren>(\\*))(.+?)\\k<paren>', 'g'),
+				to: "<b>$3</b>",
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(「.+?」|［.+?］|〔.+?〕)', 'g'),
+				to: "<b>$1</b>",
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)\\[(.+):(.+)\\]:?', 'g'),
+				to: '</p><div class=warning><span class="blink image-like">$1</span>$2</div><p>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(VRChat|evil|break|learned|T1|Windows(\\d+)?|i\\d(\\-\\d+)?|Q\\d+|[\\?？!！]+?|Twitter2?|Discord|インターネット|SAN値?(ピンチ)?|女装)', 'gi'),
+				to: '<span class="image-like colorful-rotate green fast do-not-markup" title="$1.gif">$1</span>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(?<=\\d)(:)(?=\\d)', 'g'),
+				to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(?<=\\d)(\\-)(?=\\d)', 'g'),
+				to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(?<=\\d)(\\.)(?=\\d)', 'g'),
+				to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(?<=\\d)(,)(?=\\d)', 'g'),
+				to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
+			},
+			{
+				from: new RegExp('(?<!\\<[^>]+)(\\d)', 'g'),
+				to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
+			},
+		)
+	}
 
 	const htmlSanity = text => {
 		const e = document.createElement('div');
@@ -150,6 +174,9 @@
 			document.title = `${document.title}`;
 
 		let bodyHTML = htmlSanity(a.body);
+		if (isNegativeLookBehindSupported) {
+			bodyHTML = '<span style="color:red">一部置き換えが無効化されました。最新のブラウザを使ってください。</span>' + bodyHTML
+		}
 
 		REPLACES.forEach(v => {
 			bodyHTML = bodyHTML.replace(v.from, v.to);
