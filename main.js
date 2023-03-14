@@ -112,7 +112,7 @@
 		},
 	];
 
-	const htmlSanity = text => {
+	const sanitizeHTML = text => {
 		const e = document.createElement('div');
 		e.textContent = text;
 		return e.innerHTML;
@@ -150,7 +150,7 @@
 		else
 			document.title = `${document.title}`;
 
-		let bodyHTML = htmlSanity(a.body);
+		let bodyHTML = sanitizeHTML(a.body);
 
 		REPLACES.forEach(v => {
 			bodyHTML = bodyHTML.replace(v.from, v.to);
