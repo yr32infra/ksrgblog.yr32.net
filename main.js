@@ -335,6 +335,12 @@
 		if (firstMonthI) firstMonthI.checked = true;
 	};
 
+	// distribution in range [0, 1] skewed towards the average=0.5 with higher input
+	const nTimeRandom = n => new Array(n)
+		.fill(0)
+		.map(_ => Math.random())
+		.reduce((sum, a) => sum + a, 0) / n;
+
 	const applyAccessCount = since => {
 		const ACCESS_PER_DAY = 20;
 		const DAY = 1000 * 24 * 60 * 60;
@@ -349,9 +355,15 @@
 		const e = document.getElementById('counter');
 		e.innerHTML = '';
 
+		// how much each number should be delayed, in ms
+		const delayMsTable = new Array(10)
+			.fill(0)
+			.map(_ => 1300 * nTimeRandom(2));
+
 		for (const c of accessCount.toString().padStart(8, '0')) {
 			const span = document.createElement('span');
-			span.classList.add('blink', 'image-like', 'big');
+			span.classList.add('blink', 'image-like', 'big', 'hidden-number');
+			setTimeout(() => span.classList.remove('hidden-number'), delayMsTable[c | 0])
 			span.textContent = c;
 			span.title = `${c}.gif`;
 			e.appendChild(span);
@@ -374,12 +386,6 @@
 		alert('コピー禁止！');
 		event.preventDefault();
 	});
-
-	// MAKE SLOW
-	const nTimeRandom = n => new Array(n)
-		.fill(0)
-		.map(_ => Math.random())
-		.reduce((sum, a) => sum + a, 0) / n;
 
 	const dummyLoading = new Promise(
 		f => setTimeout(f, 1000 * nTimeRandom(5))
