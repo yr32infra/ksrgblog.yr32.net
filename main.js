@@ -358,7 +358,7 @@
 		// how much each number should be delayed, in ms
 		const delayMsTable = new Array(10)
 			.fill(0)
-			.map(_ => 1300 * nTimeRandom(2));
+			.map(_ => 750 * nTimeRandom(2));
 
 		for (const c of accessCount.toString().padStart(8, '0')) {
 			const span = document.createElement('span');
