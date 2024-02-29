@@ -336,8 +336,7 @@
 	};
 
 	// distribution in range [0, 1] skewed towards the average=0.5 with higher input
-	const nTimeRandom = n => new Array(n)
-		.fill(0)
+	const nTimeRandom = n => new Float64Array(n)
 		.map(_ => Math.random())
 		.reduce((sum, a) => sum + a, 0) / n;
 
@@ -356,8 +355,7 @@
 		e.innerHTML = '';
 
 		// how much each number should be delayed, in ms
-		const delayMsTable = new Array(10)
-			.fill(0)
+		const delayMsTable = new Float64Array(10)
 			.map(_ => 750 * nTimeRandom(2));
 
 		for (const c of accessCount.toString().padStart(8, '0')) {
