@@ -191,7 +191,7 @@
 		/** @type {string | null} */
 		const articleName = new URLSearchParams(location.search).get('article');
 
-		fetch('https://blog.ksrgte.ch/api/articles')
+		fetch('https://blog.ksrgte.ch/api/list/article')
 			.then(response => response.json())
 			.then(data => {
 				const articles = data.map(a => ({
