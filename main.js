@@ -254,11 +254,11 @@
 					a = articles[articleIndex];
 				}
 
-				fetch(`https://blog.ksrgte.ch/api/article/${a.id}`)
+				fetch(`https://blog.ksrgte.ch/api/article/${a.title}`)
 					.then(response => response.text())
 					.then(data => {
 						resolve({
-							article: { title: a.id, body: data  },
+							article: { title: a.title, body: data  },
 							links: {
 								next: 0 < articleIndex ?
 									`/?article=${articles[articleIndex-1].title}` : null,
