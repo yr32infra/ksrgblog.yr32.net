@@ -254,19 +254,38 @@
 					a = articles[articleIndex];
 				}
 
+				fetch(`https://blog.ksrgte.ch/api/article/${a.id}`)
+					.then(response => response.text())
+					.then(data => {
+						resolve({
+							article: { title: a.id, body: data  },
+							links: {
+								next: 0 < articleIndex ?
+									`/?article=${articles[articleIndex-1].title}` : null,
+								prev: articleIndex+1 < articles.length ?
+									`/?article=${articles[articleIndex+1].title}` : null,
+							},
+							since: since,
+							articleTree: articleTree,
+							articleSpecified: articleSpecified,
+						});
+					})
+					.catch((v) => {
+						resolve({
+							article: { title: v.message, body: "らぎサーバーから情報を取得できません。\n\nらぎがわるいかも。" },
+							links: {
+								next: 0 < articleIndex ?
+									`/?article=${articles[articleIndex-1].title}` : null,
+								prev: articleIndex+1 < articles.length ?
+									`/?article=${articles[articleIndex+1].title}` : null,
+							},
+							since: since,
+							articleTree: articleTree,
+							articleSpecified: articleSpecified,
+						});
+					});
 
-				resolve({
-					article: a,
-					links: {
-						next: 0 < articleIndex ?
-							`/?article=${articles[articleIndex-1].title}` : null,
-						prev: articleIndex+1 < articles.length ?
-							`/?article=${articles[articleIndex+1].title}` : null,
-					},
-					since: since,
-					articleTree: articleTree,
-					articleSpecified: articleSpecified,
-				});
+
 			}).catch((v) => {
 				resolve({
 					article: { title: v.message, body: "らぎサーバーから情報を取得できません。\n\nらぎがわるいかも。" },
