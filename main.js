@@ -110,6 +110,18 @@
 			from: /(?<!\<[^>]+)(\d)/g,
 			to: '<span class="image-like colorful-rotate blue fast" title="$1.gif">$1</span>'
 		},
+		{
+			from: /^/g,
+			to: '<div>'
+		},
+		{
+			from: /\n/g,
+			to: '</div><div>'
+		},
+		{
+			from: /$/g,
+			to: '</div>'
+		},
 	];
 
 	const sanitizeHTML = text => {
